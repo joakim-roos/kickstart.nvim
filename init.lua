@@ -482,7 +482,7 @@ require('lazy').setup({
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'mason-org/mason.nvim', opts = {} },
 
-       -- This plugin streamlines Neovim's LSP setup by automating server installation and activation, providing helpful management commands, and mapping mason.nvim packages to nvim-lspconfig configurations.
+      -- This plugin streamlines Neovim's LSP setup by automating server installation and activation, providing helpful management commands, and mapping mason.nvim packages to nvim-lspconfig configurations.
       { 'mason-org/mason-lspconfig.nvim', opts = {} },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
@@ -596,6 +596,9 @@ require('lazy').setup({
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --  See `:help lsp-config` for information about keys and how to configure
       local servers = {
+        tsgo = {},
+        vtsls = {},
+        oxlint = {},
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
@@ -619,6 +622,8 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'lua_ls', -- Lua Language server
         'stylua', -- Used to format Lua code
+        'oxfmt',
+        'prettierd',
         -- You can add other tools here that you want Mason to install
       })
 
@@ -689,11 +694,23 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        javascript = { 'oxfmt', 'prettierd', stop_after_first = true },
+        typescript = { 'oxfmt', 'prettierd', stop_after_first = true },
+        javascriptreact = { 'oxfmt', 'prettierd', stop_after_first = true },
+        typescriptreact = { 'oxfmt', 'prettierd', stop_after_first = true },
+        json = { 'oxfmt' },
+        jsonc = { 'oxfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      },
+      formatters = {
+        oxfmt = { require_cwd = true },
+      },
+      default_format_opts = {
+        lsp_format = 'fallback',
       },
     },
   },
@@ -875,9 +892,9 @@ require('lazy').setup({
   --
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
